@@ -1,17 +1,47 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  User, GraduationCap, Briefcase, Mail, Linkedin, Github, Award, FileText, Quote, FileSpreadsheet,
-  LineChart, ShieldCheck, Menu, X, Sun, Moon, Filter, ChevronRight, ChevronLeft, ArrowUp, Images,
-  BarChart, Database, ClipboardList, Download, CheckCircle2,
+  User,
+  GraduationCap,
+  Briefcase,
+  Mail,
+  Linkedin,
+  Github,
+  Award,
+  FileText,
+  Quote,
+  FileSpreadsheet,
+  LineChart,
+  ShieldCheck,
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Filter,
+  ChevronRight,
+  ChevronLeft,
+  ArrowUp,
+  Images,
+  BarChart,
+  Database,
+  ClipboardList,
+  Download,
+  CheckCircle2,
 } from 'lucide-react';
 
+/*************************
+ *  STATIC ASSETS / CONFIG
+ *************************/
 const ASSETS = {
+  // --- Headshot + fallbacks ---
   headshot: '/assets/1724629082521.jpg',
   fallbackHeadshotA: '/assets/jenifer.jpg',
   fallbackHeadshotB: '/1724629082521.jpg',
   fallbackHeadshotC: '1724629082521.jpg',
+
+  // --- Ways of working image ---
   agileCycle: '/assets/REASON1-1.webp',
 
+  // ---- Project images (filenames must match /public/assets) ----
   unileverCanteen: '/assets/Unilever Canteen project.jpg',
   tableauGfdd: '/assets/Tableau.png',
   stanfordLms: '/assets/Scope diagram stanford Library Management.jpg',
@@ -28,12 +58,15 @@ const ASSETS = {
   dissertationModel: '/assets/Dynamic capabilities (Dissertation).jpg',
   dissertationWordcloud: '/assets/word cloud (Dissertation).jpg',
 
+  // ---- Volunteering logos ----
   charityLogo: '/assets/Charity home.jpg',
   trendLogo: '/assets/Trend Clothing.jpg',
   aviobyLogo: '/assets/avioby_logo.jpg',
 
+  // ---- Certificates (pdf or image) ----
   certCBAP: '/assets/CBAP.pdf',
-  certAWS: '/assets/CertificateOfCompletion_AWS%20Certified%20Data%20Analytics%20%20Specialty%20DASC01%20Cert%20Prep%203%20Processing.pdf',
+  certAWS:
+    '/assets/CertificateOfCompletion_AWS%20Certified%20Data%20Analytics%20%20Specialty%20DASC01%20Cert%20Prep%203%20Processing.pdf',
   certDataQuality: '/assets/CertificateOfCompletion_Data%20Quality%20Core%20Concepts.pdf',
   certSalesforce: '/assets/CertificateOfCompletion_Salesforce%20Essential%20Training.pdf',
   certSnowflake: '/assets/CertificateOfCompletion_Snowflake%20SnowPro%20Core%20Cert%20Prep.pdf',
@@ -43,6 +76,8 @@ const ASSETS = {
   certGCPFundamentals: '/assets/Google%20Cloud%20certificate.pdf',
   certGCPBatch: '/assets/Building%20batch%20data%20pipelines%20on%20google%20cloud.pdf',
   hackerRankSqlUrl: 'https://www.hackerrank.com/certificates/60f0b79dd34f',
+
+  // ---- CV ----
   cv: '/assets/Jenifer%20CV.pdf',
 };
 
@@ -57,14 +92,32 @@ const PROFILE = {
   values: ['Transparency', 'Accountability', 'Diversity'],
 };
 
+/*********************
+ *  DATA
+ *********************/
 const achievements = [
-  { title: 'Selected — Barclays Demo Directory (2024)', detail: 'Presented GENZAI (AI-integrated SaaS concept) to investor/mentor network; recognised for KPI-led, visual communication to mixed audiences.' },
-  { title: 'Dissertation distinction (module)', detail: 'Dynamic Capabilities & Business-Model Innovation for SME Generative-AI Adoption (University of Liverpool, 2024).' },
-  { title: 'Peer-reviewed publication (IJSART, 2020)', detail: 'SOSOL — Security of Soldiers (battery-first SOS tech for field reliability).' },
+  {
+    title: 'Selected — Barclays Demo Directory (2024)',
+    detail:
+      'Presented GENZAI (AI-integrated SaaS concept) to investor/mentor network; recognised for KPI-led, visual communication to mixed audiences.',
+  },
+  {
+    title: 'Dissertation distinction (module)',
+    detail:
+      'Dynamic Capabilities & Business-Model Innovation for SME Generative-AI Adoption (University of Liverpool, 2024).',
+  },
+  {
+    title: 'Peer-reviewed publication (IJSART, 2020)',
+    detail: 'SOSOL — Security of Soldiers (battery-first SOS tech for field reliability).',
+  },
 ];
 
 const experience = [
-  { company: 'GENZAI (SaaS concept)', role: 'Founder & Business Analyst', time: 'Aug 2024 - Jul 2025 · UK (Hybrid)', points: [
+  {
+    company: 'GENZAI (SaaS concept)',
+    role: 'Founder & Business Analyst',
+    time: 'Aug 2024 - Jul 2025 · UK (Hybrid)',
+    points: [
       'Designed an AI-integrated business model (OpenAI APIs) and streamlined onboarding flows (~30% step reduction).',
       'Ran research (100+ surveys, 20+ interviews); MVP requirements achieved ~70% alignment with target users.',
       'Built end-to-end process maps (Visio/Whimsical) and KPI framework to align product, ops and finance.',
@@ -74,7 +127,11 @@ const experience = [
     skills: ['Python','Power BI','Excel forecasting','Process mapping','KPI design','Stakeholder management','Presentation'],
     category: 'Business Analysis',
   },
-  { company: 'KultureHire', role: 'Business Analyst Intern', time: 'May 2023 - Jun 2023 · Remote (India)', points: [
+  {
+    company: 'KultureHire',
+    role: 'Business Analyst Intern',
+    time: 'May 2023 - Jun 2023 · Remote (India)',
+    points: [
       'Analysed 5k+ Gen‑Z datapoints; improved engagement recommendations by ~25%.',
       'Built ETL → dashboard workflow that reduced reporting time by ~35% and expanded access for non‑technical users by ~50%.',
       'Insights contributed to two platform feature updates.',
@@ -85,43 +142,115 @@ const experience = [
 ];
 
 const projects = [
-  { title: 'Canteen Ordering System – Unilever (Simulated Client Project)', tags: ['Stakeholders','UML/ERD','Wireframes','Process'],
-    summary: 'End-to-end BA for a simulated Unilever case: as-is/to-be, use cases, ERD and wireframes to reduce queues, food waste and operating cost across 1,500 employees on 12 floors.',
-    category: 'Business Analysis', media: [{ src: ASSETS.unileverCanteen, alt: 'Unilever canteen ordering flow' }] },
-  { title: 'Global Financial Development & Insurance – Tableau', tags: ['Tableau','KPI','Maps','Growth'],
-    summary: 'Interactive dashboard blending World Bank GFDD with insurance sample data: parameters, KPI tables, growth indicators and trend trails.',
-    category: 'BI / Visualisation', media: [{ src: ASSETS.tableauGfdd, alt: 'Tableau certification / dashboard' }] },
-  { title: 'Stanford Library Management System (LMS)', tags: ['Use cases','RFID','Cloud'],
-    summary: 'Digital LMS replacing manual ops: stakeholder requirements, flows for issue/return, RFID anti-theft and automated fines; kiosk, web and mobile access.',
-    category: 'Business Analysis', media: [{ src: ASSETS.stanfordLms, alt: 'Stanford LMS scope diagram' }] },
-  { title: 'Google Play Store – App Rating Prediction', tags: ['EDA','Cleaning','Feature engineering','Python'],
-    summary: 'End-to-end EDA and modelling to explain/predict app ratings; handled nulls/outliers/duplicates; visualised category patterns; delivered recs to improve ratings.',
-    category: 'Analytics', media: [{ src: ASSETS.googlePlay, alt: 'Google Play rating analysis plot' }] },
-  { title: "Children's Book Club – SQL + NoSQL Data Design", tags: ['ERD','MongoDB','Recommendations'],
-    summary: 'Hybrid data strategy: relational core (orders/feedback/recommendations) plus MongoDB for semi-structured signals to power personalisation and demand planning.',
-    category: 'Business Analysis', media: [{ src: ASSETS.bookclubErd, alt: "Children's book club ERD" }] },
-  { title: "Decision Tree – Car Acceptance (Hunt's + Gini)", tags: ['Decision Tree','Gini','Explainability','Python'],
-    summary: 'Transparent classifier (acc/unacc). Pruned tree improved generalisation; evaluated via confusion matrix, precision/recall and F1.',
-    category: 'Analytics', media: [{ src: ASSETS.decisionTreeFull, alt: 'Fully grown decision tree' }, { src: ASSETS.decisionTreePruned, alt: 'Pruned decision tree' }] },
-  { title: 'US Retail – Qlik Sense Performance Dashboard', tags: ['Revenue','Margin','City'],
-    summary: 'Executive view with KPIs, map and trends; actions for margin lift and city prioritisation.',
-    category: 'BI / Visualisation', media: [{ src: ASSETS.qlikDashboard, alt: 'Qlik Sense retail dashboard' }] },
-  { title: 'Predictive Maintenance in Manufacturing – K-Means Clustering', tags: ['K-Means','Elbow','Clusters'],
-    summary: 'Clustered temp/speed/torque/wear; identified a high-risk operating state (~2× failure) to drive risk‑based maintenance.',
-    category: 'Analytics', media: [{ src: ASSETS.kmeansMain, alt: 'K-means clustering' }, { src: ASSETS.kmeansClusterDist, alt: 'Cluster distribution' }, { src: ASSETS.kmeansFeatureDist, alt: 'Feature distribution per cluster' }] },
-  { title: 'Big Data Analytics for Business – Spotify Case Study', tags: ['EDA','Feature importance','Confusion matrix'],
-    summary: 'Explored personalisation and hit prediction; roadmap across infra, skills and governance to operationalise insights.',
-    category: 'Analytics', media: [{ src: ASSETS.spotifyConfusion, alt: 'Spotify confusion matrix' }, { src: ASSETS.spotifyTop20, alt: 'Top 20 words chart' }] },
-  { title: 'MSc Dissertation – Dynamic Capabilities & Business Model Innovation through GenAI (SMEs)', tags: ['SLR','Case studies','GenAI','Dynamic capabilities'],
-    summary: 'PRISMA-guided SLR + case studies; conceptual model linking sensing/seizing/transforming to GenAI adoption and measurable innovation outcomes.',
-    category: 'Business Analysis', media: [{ src: ASSETS.dissertationModel, alt: 'Dynamic capabilities conceptual model' }, { src: ASSETS.dissertationWordcloud, alt: 'Dissertation word cloud' }] },
+  {
+    title: 'Canteen Ordering System – Unilever (Simulated Client Project)',
+    tags: ['Stakeholders', 'UML/ERD', 'Wireframes', 'Process'],
+    summary:
+      'End-to-end BA for a simulated Unilever case: as-is/to-be, use cases, ERD and wireframes to reduce queues, food waste and operating cost across 1,500 employees on 12 floors.',
+    category: 'Business Analysis',
+    media: [{ src: ASSETS.unileverCanteen, alt: 'Unilever canteen ordering flow' }],
+  },
+  {
+    title: 'Global Financial Development & Insurance – Tableau',
+    tags: ['Tableau', 'KPI', 'Maps', 'Growth'],
+    summary:
+      'Interactive dashboard blending World Bank GFDD with insurance sample data: parameters, KPI tables, growth indicators and trend trails.',
+    category: 'BI / Visualisation',
+    media: [{ src: ASSETS.tableauGfdd, alt: 'Tableau certification / dashboard' }],
+  },
+  {
+    title: 'Stanford Library Management System (LMS)',
+    tags: ['Use cases', 'RFID', 'Cloud'],
+    summary:
+      'Digital LMS replacing manual ops: stakeholder requirements, flows for issue/return, RFID anti-theft and automated fines; kiosk, web and mobile access.',
+    category: 'Business Analysis',
+    media: [{ src: ASSETS.stanfordLms, alt: 'Stanford LMS scope diagram' }],
+  },
+  {
+    title: 'Google Play Store – App Rating Prediction',
+    tags: ['EDA', 'Cleaning', 'Feature engineering', 'Python'],
+    summary:
+      'End-to-end EDA and modelling to explain/predict app ratings; handled nulls/outliers/duplicates; visualised category patterns; delivered recs to improve ratings.',
+    category: 'Analytics',
+    media: [{ src: ASSETS.googlePlay, alt: 'Google Play rating analysis plot' }],
+  },
+  {
+    title: "Children's Book Club – SQL + NoSQL Data Design",
+    tags: ['ERD', 'MongoDB', 'Recommendations'],
+    summary:
+      'Hybrid data strategy: relational core (orders/feedback/recommendations) plus MongoDB for semi-structured signals to power personalisation and demand planning.',
+    category: 'Business Analysis',
+    media: [{ src: ASSETS.bookclubErd, alt: "Children's book club ERD" }],
+  },
+  {
+    title: `Decision Tree – Car Acceptance (Hunt's + Gini)`,
+
+    tags: ['Decision Tree', 'Gini', 'Explainability', 'Python'],
+    summary:
+      'Transparent classifier (acc/unacc). Pruned tree improved generalisation; evaluated via confusion matrix, precision/recall and F1.',
+    category: 'Analytics',
+    media: [
+      { src: ASSETS.decisionTreeFull, alt: 'Fully grown decision tree' },
+      { src: ASSETS.decisionTreePruned, alt: 'Pruned decision tree' },
+    ],
+  },
+  {
+    title: 'US Retail – Qlik Sense Performance Dashboard',
+    tags: ['Revenue', 'Margin', 'City'],
+    summary:
+      'Executive view with KPIs, map and trends; actions for margin lift and city prioritisation.',
+    category: 'BI / Visualisation',
+    media: [{ src: ASSETS.qlikDashboard, alt: 'Qlik Sense retail dashboard' }],
+  },
+  {
+    title: 'Predictive Maintenance in Manufacturing – K-Means Clustering',
+    tags: ['K-Means', 'Elbow', 'Clusters'],
+    summary:
+      'Clustered temp/speed/torque/wear; identified a high-risk operating state (~2× failure) to drive risk‑based maintenance.',
+    category: 'Analytics',
+    media: [
+      { src: ASSETS.kmeansMain, alt: 'K-means clustering' },
+      { src: ASSETS.kmeansClusterDist, alt: 'Cluster distribution' },
+      { src: ASSETS.kmeansFeatureDist, alt: 'Feature distribution per cluster' },
+    ],
+  },
+  {
+    title: 'Big Data Analytics for Business – Spotify Case Study',
+    tags: ['EDA', 'Feature importance', 'Confusion matrix'],
+    summary:
+      'Explored personalisation and hit prediction; roadmap across infra, skills and governance to operationalise insights.',
+    category: 'Analytics',
+    media: [
+      { src: ASSETS.spotifyConfusion, alt: 'Spotify confusion matrix' },
+      { src: ASSETS.spotifyTop20, alt: 'Top 20 words chart' },
+    ],
+  },
+  {
+    title: 'MSc Dissertation – Dynamic Capabilities & Business Model Innovation through GenAI (SMEs)',
+    tags: ['SLR', 'Case studies', 'GenAI', 'Dynamic capabilities'],
+    summary:
+      'PRISMA-guided SLR + case studies; conceptual model linking sensing/seizing/transforming to GenAI adoption and measurable innovation outcomes.',
+    category: 'Business Analysis',
+    media: [
+      { src: ASSETS.dissertationModel, alt: 'Dynamic capabilities conceptual model' },
+      { src: ASSETS.dissertationWordcloud, alt: 'Dissertation word cloud' },
+    ],
+  },
 ];
 
 const recommendations = [
-  { name: 'Dr Omar Khaled (MSc Supervisor)', quote: 'Jenifer transforms complex AI into practical, business‑ready solutions. Distinction for the dissertation and strong BA/analytics capability.' },
+  {
+    name: 'Dr Omar Khaled (MSc Supervisor)',
+    quote:
+      'Jenifer transforms complex AI into practical, business‑ready solutions. Distinction for the dissertation and strong BA/analytics capability.',
+  },
   { name: 'Alexis Mathai (Barclays)', quote: 'Outstanding, collaborative problem‑solver who delivers excellence in everything she does.' },
   { name: 'Jennifer Kwakwa‑Sarpong (MSc cohort)', quote: 'Creative + precise: turns analytics into business impact with Python/SQL/visualisation.' },
-  { name: 'Paolo Boccafresca (Co‑founder, startup)', quote: 'Jenifer led the AI/ML work in our early‑stage startup, acting as a de‑facto CTO—shaping the business model, applying modern ML tools for analysis/diagnostics, and coordinating the team.' },
+  {
+    name: 'Paolo Boccafresca (Co‑founder, startup)',
+    quote:
+      'Jenifer led the AI/ML work in our early‑stage startup, acting as a de‑facto CTO—shaping the business model, applying modern ML tools for analysis/diagnostics, and coordinating the team.',
+  },
 ];
 
 const certsGallery = [
@@ -144,10 +273,19 @@ const volunteering = [
   { org: 'Avioby', role: 'Business & Operations Support (Volunteer)', time: 'May 2025 – Aug 2025', text: 'Hiring ops, onboarding coordination and competitor research to inform product positioning.', logo: ASSETS.aviobyLogo },
 ];
 
+/*********************
+ *  UI PRIMITIVES
+ *********************/
 const cx = (...classes: (string | false | null | undefined)[]) => classes.filter(Boolean).join(' ');
 
-const Button: React.FC<{ children: React.ReactNode; variant?: 'default'|'outline'|'ghost'|'link'; size?: 'default'|'sm'|'lg'|'icon'; className?: string; onClick?: () => void; type?: 'button'|'submit'|'reset'; }>
-= ({ children, variant = 'default', size = 'default', className, onClick, type = 'button', ...props }) => {
+const Button: React.FC<{
+  children: React.ReactNode;
+  variant?: 'default' | 'outline' | 'ghost' | 'link';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+  className?: string;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
+}> = ({ children, variant = 'default', size = 'default', className, onClick, type = 'button', ...props }) => {
   const base = 'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
   const variants = {
     default: 'bg-fuchsia-600 text-white hover:bg-fuchsia-700 dark:bg-fuchsia-500 dark:text-white dark:hover:bg-fuchsia-600',
@@ -156,35 +294,48 @@ const Button: React.FC<{ children: React.ReactNode; variant?: 'default'|'outline
     link: 'text-slate-900 underline-offset-4 hover:underline dark:text-slate-50',
   } as const;
   const sizes = { default: 'h-10 px-4 py-2', sm: 'h-9 px-3', lg: 'h-11 px-8', icon: 'h-10 w-10' } as const;
-  return (<button type={type} className={cx(base, variants[variant], sizes[size], className)} onClick={onClick} {...props}>{children}</button>);
+  return (
+    <button type={type} className={cx(base, variants[variant], sizes[size], className)} onClick={onClick} {...props}>
+      {children}
+    </button>
+  );
 };
 
 const Card: React.FC<{ className?: string; onClick?: () => void; children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>> = ({ children, className, onClick, ...props }) => (
-  <div className={cx('rounded-lg border bg-white text-slate-950 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50', className)} onClick={onClick} {...props}>{children}</div>
+  <div className={cx('rounded-lg border bg-white text-slate-950 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50', className)} onClick={onClick} {...props}>
+    {children}
+  </div>
 );
 const CardHeader: React.FC<{ className?: string; children: React.ReactNode }> = ({ children, className }) => <div className={cx('flex flex-col space-y-1.5 p-6', className)}>{children}</div>;
 const CardTitle: React.FC<{ className?: string; children: React.ReactNode }> = ({ children, className }) => <h3 className={cx('text-2xl font-semibold leading-none tracking-tight', className)}>{children}</h3>;
 const CardContent: React.FC<{ className?: string; children: React.ReactNode }> = ({ children, className }) => <div className={cx('p-6 pt-0', className)}>{children}</div>;
 
-const Badge: React.FC<{ className?: string; children: React.ReactNode; variant?: 'default'|'secondary' }> = ({ children, variant = 'default', className }) => {
+const Badge: React.FC<{ className?: string; children: React.ReactNode; variant?: 'default' | 'secondary' }> = ({ children, variant = 'default', className }) => {
   const base = 'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
-  const variants = { default: 'border-transparent bg-slate-900 text-slate-50 hover:bg-slate-900/80 dark:bg-slate-50 dark:text-slate-900',
-    secondary: 'border-transparent bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50', } as const;
+  const variants = {
+    default: 'border-transparent bg-slate-900 text-slate-50 hover:bg-slate-900/80 dark:bg-slate-50 dark:text-slate-900',
+    secondary: 'border-transparent bg-slate-100 text-slate-900 hover:bg-slate-100/80 dark:bg-slate-800 dark:text-slate-50',
+  } as const;
   return <span className={cx(base, variants[variant], className)}>{children}</span>;
 };
 
 const Section: React.FC<{ id: string; title: string; icon: React.ReactNode; className?: string; children: React.ReactNode }> = ({ id, title, icon, children, className }) => (
   <section id={id} className={cx('max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16', className)}>
-    <h2 className="text-3xl sm:text-4xl font-bold mb-10 flex items-center gap-3 text-slate-900 dark:text-slate-50">{icon} {title}</h2>
+    <h2 className="text-3xl sm:text-4xl font-bold mb-10 flex items-center gap-3 text-slate-900 dark:text-slate-50">
+      {icon} {title}
+    </h2>
     {children}
   </section>
 );
 
+// Simple dialog
 const Dialog: React.FC<{ open: boolean; onOpenChange: (v: boolean) => void; className?: string; children: React.ReactNode }> = ({ open, onOpenChange, children, className }) => (
   <div className={cx('fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 transition-all', open ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none')}>
     <div className="fixed inset-0 bg-black/50" onClick={() => onOpenChange(false)} />
     <div className={cx('relative z-10 w-full max-w-lg md:max-w-3xl rounded-lg border bg-white p-6 shadow-lg dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50', className)}>
-      <button aria-label="Close dialog" className="absolute top-4 right-4" onClick={() => onOpenChange(false)}><X className="h-5 w-5" /></button>
+      <button aria-label="Close dialog" className="absolute top-4 right-4" onClick={() => onOpenChange(false)}>
+        <X className="h-5 w-5" />
+      </button>
       {children}
     </div>
   </div>
@@ -193,29 +344,49 @@ const DialogHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const DialogTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => <h3 className="text-lg font-semibold leading-none tracking-tight">{children}</h3>;
 const DialogDescription: React.FC<{ children: React.ReactNode }> = ({ children }) => <p className="text-sm text-slate-500 dark:text-slate-400">{children}</p>;
 
+// Image with fallbacks
 const SmartImage: React.FC<{ sources: string[]; alt: string; className?: string }> = ({ sources, alt, className }) => {
   const [idx, setIdx] = useState(0);
   const src = sources[idx];
   if (!src) return null;
-  return <img src={encodeURI(src)} alt={alt} className={className} loading="lazy" onError={() => setIdx((i) => (i + 1 < sources.length ? i + 1 : i))} />;
+  return (
+    <img
+      src={encodeURI(src)}
+      alt={alt}
+      className={className}
+      loading="lazy"
+      onError={() => setIdx((i) => (i + 1 < sources.length ? i + 1 : i))}
+    />
+  );
 };
+
+// Project image: try encoded spaces and extension fallbacks
 const ProjectImage: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
   const candidates: string[] = [src];
   if (!src.includes('%20') && src.includes(' ')) candidates.push(src.replace(/ /g, '%20'));
-  if (src.lower().endswith('.jpg')) candidates.append(src[:-4] + '.png');
+  if (src.endsWith('.jpg')) candidates.push(src.replace(/\.jpg$/i, '.png'));
+  if (src.endsWith('.jpeg')) candidates.push(src.replace(/\.jpeg$/i, '.png'));
+  if (src.endsWith('.png')) candidates.push(src.replace(/\.png$/i, '.jpg'));
   return <SmartImage sources={candidates} alt={alt} className={className} />;
 };
 
-// Corrected ProjectImage (override)
-const ProjectImage2: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
-  const list: string[] = [src];
-  if (!src.includes('%20') && src.includes(' ')) list.push(src.replace(/ /g, '%20'));
-  if (src.endsWith('.jpg')) list.push(src.replace(/\.jpg$/i, '.png'));
-  if (src.endsWith('.jpeg')) list.push(src.replace(/\.jpeg$/i, '.png'));
-  if (src.endsWith('.png')) list.push(src.replace(/\.png$/i, '.jpg'));
-  return <SmartImage sources={list} alt={alt} className={className} />;
-};
+// Skill card
+const SkillCard: React.FC<{ title: string; items: string[]; icon?: React.ReactNode }> = ({ title, items, icon }) => (
+  <Card className="hover:shadow-md transition-shadow h-full">
+    <CardHeader>
+      <CardTitle className="text-lg flex items-center gap-2">{icon} {title}</CardTitle>
+    </CardHeader>
+    <CardContent className="text-sm text-slate-700 dark:text-slate-300">
+      <ul className="list-disc pl-5 space-y-1">
+        {items.map((item, i) => (<li key={i}>{item}</li>))}
+      </ul>
+    </CardContent>
+  </Card>
+);
 
+/*********************
+ *  MAIN APP
+ *********************/
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const getInitialTheme = (): 'light' | 'dark' => {
@@ -234,17 +405,20 @@ export default function App() {
   const [certFilter, setCertFilter] = useState('All');
   const [certQuery, setCertQuery] = useState('');
 
+  // Theme
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // Scroll watcher
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 800);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Auto-rotate recommendations
   useEffect(() => {
     const id = setInterval(() => setActiveRec((i) => (i + 1) % recommendations.length), 5000);
     return () => clearInterval(id);
@@ -272,8 +446,10 @@ export default function App() {
 
   return (
     <div className={cx('min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 text-slate-900 dark:text-slate-100', 'scroll-smooth')}>
+      {/* HEADER */}
       <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 shadow-sm border-b border-slate-200/80 dark:border-slate-700/80">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* No name here per request; just nav */}
           <nav className="hidden md:flex gap-6 text-sm">
             <a href="#about" onClick={(e) => { e.preventDefault(); handleScrollTo('about'); }} className="hover:underline flex items-center gap-1"><User size={16}/> About</a>
             <a href="#experience" onClick={(e) => { e.preventDefault(); handleScrollTo('experience'); }} className="hover:underline flex items-center gap-1"><Briefcase size={16}/> Experience</a>
@@ -296,6 +472,7 @@ export default function App() {
             <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu" onClick={() => setMenuOpen(true)}><Menu className="h-6 w-6"/></Button>
           </div>
         </div>
+        {/* Mobile sheet */}
         {menuOpen && (
           <div className="md:hidden fixed inset-0 bg-black/30" onClick={() => setMenuOpen(false)}>
             <div className="ml-auto bg-white dark:bg-slate-900 h-full w-72 p-4" onClick={(e) => e.stopPropagation()}>
@@ -324,6 +501,7 @@ export default function App() {
         )}
       </header>
 
+      {/* HERO */}
       <section id="hero" className="relative overflow-hidden pt-10 pb-6 min-h-[calc(100vh-64px)] flex items-center">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6 relative z-10 w-full">
           <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -340,10 +518,15 @@ export default function App() {
               </div>
             </div>
             <div className="order-1 md:order-2 flex md:justify-end">
-              <SmartImage sources={[ASSETS.headshot, ASSETS.fallbackHeadshotA, ASSETS.fallbackHeadshotB, ASSETS.fallbackHeadshotC]} alt="Jenifer headshot" className="h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-lg" />
+              <SmartImage
+                sources={[ASSETS.headshot, ASSETS.fallbackHeadshotA, ASSETS.fallbackHeadshotB, ASSETS.fallbackHeadshotC]}
+                alt="Jenifer headshot"
+                className="h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-lg"
+              />
             </div>
           </div>
         </div>
+        {/* mobile sticky CTA */}
         <div className="sm:hidden fixed bottom-3 inset-x-3 z-40">
           <div className="rounded-2xl shadow-lg bg-white/90 dark:bg-slate-800/90 backdrop-blur p-2 flex gap-2">
             <a className="flex-1" href={`mailto:${PROFILE.email}`}><Button className="w-full">Email</Button></a>
@@ -352,30 +535,41 @@ export default function App() {
         </div>
       </section>
 
+      {/* ABOUT */}
       <Section id="about" title="About" icon={<User className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="md:col-span-2 hover:shadow-md transition-shadow">
             <CardContent className="pt-6 text-slate-700 dark:text-slate-300 leading-relaxed">
-              <p>I'm a Junior Data & Business Analyst who connects data with strategy. During my MSc, I delivered predictive/prescriptive analytics in Python, built relational models in SQL, and completed a PRISMA‑guided SLR with case studies on how SMEs adopt Generative AI through dynamic capabilities—producing a practical conceptual model for leaders.</p>
-              <p className="mt-3">Alongside academics, I founded <span className="font-semibold">GENZAI</span>—an AI‑integrated SaaS concept—where I led research, as‑is/to‑be flows, KPI validation with a senior financial analyst, and Excel forecasting; the concept was selected for Barclays’ Demo Directory. I prefer visuals over jargon and design dashboards people can actually use.</p>
+              <p>
+                I'm a Junior Data & Business Analyst who connects data with strategy. During my MSc, I delivered predictive/prescriptive analytics in Python, built relational models in SQL, and completed a PRISMA‑guided SLR with case studies on how SMEs adopt Generative AI through dynamic capabilities—producing a practical conceptual model for leaders.
+              </p>
+              <p className="mt-3">
+                Alongside academics, I founded <span className="font-semibold">GENZAI</span>—an AI‑integrated SaaS concept—where I led research, as‑is/to‑be flows, KPI validation with a senior financial analyst, and Excel forecasting; the concept was selected for Barclays’ Demo Directory. I prefer visuals over jargon and design dashboards people can actually use.
+              </p>
               <div className="mt-5 flex flex-wrap items-center gap-2">
                 {['𝐈 𝐋𝐢𝐬𝐭𝐞𝐧 𝐟𝐢𝐫𝐬𝐭','𝐕𝐢𝐬𝐮𝐚𝐥𝐢𝐬𝐞𝐝 𝐭𝐡𝐞 𝐰𝐨𝐫𝐤','𝐓𝐫𝐚𝐧𝐬𝐥𝐚𝐭𝐞 𝐚𝐜𝐫𝐨𝐬𝐬 𝐟𝐮𝐧𝐜𝐭𝐢𝐨𝐧𝐬','𝐃𝐞𝐟𝐢𝐧𝐞 𝐊𝐏𝐈𝐬 & 𝐦𝐨𝐝𝐞𝐥 𝐢𝐦𝐩𝐚𝐜𝐭','𝐁𝐮𝐢𝐥𝐝 𝐝𝐚𝐭𝐚 𝐬𝐭𝐨𝐫𝐢𝐞𝐬','𝐃𝐨 𝐭𝐡𝐞 𝐡𝐨𝐦𝐞𝐰𝐨𝐫𝐤.'].map((step, i, arr) => (
-                  <React.Fragment key={step}><Badge variant="secondary" className="rounded-full">{step}</Badge>{i < arr.length - 1 && <ChevronRight className="h-4 w-4 opacity-60" />}</React.Fragment>
+                  <React.Fragment key={step}>
+                    <Badge variant="secondary" className="rounded-full">{step}</Badge>
+                    {i < arr.length - 1 && <ChevronRight className="h-4 w-4 opacity-60" />}
+                  </React.Fragment>
                 ))}
               </div>
             </CardContent>
           </Card>
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader><CardTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400"/> Ways of working (Agile)</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400"/> Ways of working (Agile)</CardTitle>
+            </CardHeader>
             <CardContent className="text-sm text-slate-700 dark:text-slate-300">
               <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
-                <ProjectImage2 src={ASSETS.agileCycle} alt="Agile methodology cycle" className="w-full h-auto object-contain" />
+                <ProjectImage src={ASSETS.agileCycle} alt="Agile methodology cycle" className="w-full h-auto object-contain" />
               </div>
             </CardContent>
           </Card>
         </div>
       </Section>
 
+      {/* EXPERIENCE */}
       <Section id="experience" title="Experience" icon={<Briefcase className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid gap-6 md:grid-cols-2">
           {experience.map((e, idx) => (
@@ -387,7 +581,11 @@ export default function App() {
                 </CardHeader>
                 <CardContent className="text-sm text-slate-700 dark:text-slate-300">
                   <ul className="list-disc pl-5 space-y-2">{e.points.map((p, i) => (<li key={i}>{p}</li>))}</ul>
-                  {e.skills && e.skills.length > 0 && (<div className="mt-4 flex flex-wrap gap-2">{e.skills.map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}</div>)}
+                  {e.skills && e.skills.length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {e.skills.map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -395,21 +593,34 @@ export default function App() {
         </div>
       </Section>
 
+      {/* PROJECTS */}
       <Section id="projects" title="Projects" icon={<FileText className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
+        {/* Filters */}
         <div className="flex flex-nowrap items-center gap-2 mb-6 overflow-x-auto no-scrollbar snap-x">
           <Badge className="rounded-full whitespace-nowrap"><Filter className="h-3.5 w-3.5 mr-1" /> Filter</Badge>
-          {['All','Business Analysis','Analytics','BI / Visualisation'].map((c) => (
-            <Button key={c} onClick={() => setProjFilter(c)} className={cx('px-3 py-1.5 rounded-full border text-sm whitespace-nowrap snap-start', projFilter === c ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700')} variant="ghost">{c}</Button>
+          {categories.map((c) => (
+            <Button
+              key={c}
+              onClick={() => setProjFilter(c)}
+              className={cx(
+                'px-3 py-1.5 rounded-full border text-sm whitespace-nowrap snap-start',
+                projFilter === c ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'hover:bg-slate-100 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700'
+              )}
+              variant="ghost"
+            >
+              {c}
+            </Button>
           ))}
         </div>
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {(projFilter === 'All' ? projects : projects.filter(p => p.category === projFilter)).map((p, idx) => (
+          {filteredProjects.map((p, idx) => (
             <div key={p.title} className="animate-fade-in-up" style={{ animationDelay: `${idx * 0.03}s` }}>
               <Card onClick={() => { setOpenProject(p); setCarouselIdx(0); }} className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                 {p.media?.[0] ? (
                   <div className="p-3 pt-3">
                     <div className="aspect-video w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
-                      <ProjectImage2 src={p.media[0].src} alt={p.media[0].alt} className="h-full w-full object-contain" />
+                      <ProjectImage src={p.media[0].src} alt={p.media[0].alt} className="h-full w-full object-contain" />
                     </div>
                   </div>
                 ) : (
@@ -417,34 +628,47 @@ export default function App() {
                     <div className="aspect-video w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center text-slate-500"><Images className="h-6 w-6 mr-2"/> Preview</div>
                   </div>
                 )}
-                <CardHeader><CardTitle className="text-base flex items-center justify-between gap-3">{p.title}<ChevronRight className="h-4 w-4 opacity-60"/></CardTitle></CardHeader>
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center justify-between gap-3">{p.title}<ChevronRight className="h-4 w-4 opacity-60"/></CardTitle>
+                </CardHeader>
                 <CardContent className="text-sm text-slate-700 dark:text-slate-300 space-y-3">
                   <p>{p.summary}</p>
-                  <div className="flex flex-wrap gap-2">{p.tags.map((t) => (<Badge key={t} variant="secondary" className="rounded-full">{t}</Badge>))}</div>
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map((t) => (<Badge key={t} variant="secondary" className="rounded-full">{t}</Badge>))}
+                  </div>
                 </CardContent>
               </Card>
             </div>
           ))}
         </div>
+
+        {/* Project modal */}
         <Dialog open={!!openProject} onOpenChange={(v) => { if (!v) setOpenProject(null); }}>
-          <DialogHeader><DialogTitle>{openProject?.title}</DialogTitle><DialogDescription>{openProject?.summary}</DialogDescription></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{openProject?.title}</DialogTitle>
+            <DialogDescription>{openProject?.summary}</DialogDescription>
+          </DialogHeader>
           {openProject?.media && openProject.media.length > 0 && (
             <div className="mt-3">
               <div className="relative">
                 <div className="aspect-video w-full overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
-                  <ProjectImage2 src={openProject.media[carouselIdx].src} alt={openProject.media[carouselIdx].alt} className="h-full w-full object-contain" />
+                  <ProjectImage src={openProject.media[carouselIdx].src} alt={openProject.media[carouselIdx].alt} className="h-full w-full object-contain" />
                 </div>
                 <div className="absolute inset-y-0 left-0 flex items-center">
-                  <Button variant="outline" size="icon" className="ml-2 bg-white/70 dark:bg-slate-900/70" onClick={() => setCarouselIdx((i) => (i - 1 + openProject.media.length) % openProject.media.length)} aria-label="Previous image"><ChevronLeft className="h-4 w-4"/></Button>
+                  <Button variant="outline" size="icon" className="ml-2 bg-white/70 dark:bg-slate-900/70" onClick={() => setCarouselIdx((i) => (i - 1 + openProject.media.length) % openProject.media.length)} aria-label="Previous image">
+                    <ChevronLeft className="h-4 w-4"/>
+                  </Button>
                 </div>
                 <div className="absolute inset-y-0 right-0 flex items-center">
-                  <Button variant="outline" size="icon" className="mr-2 bg-white/70 dark:bg-slate-900/70" onClick={() => setCarouselIdx((i) => (i + 1) % openProject.media.length)} aria-label="Next image"><ChevronRight className="h-4 w-4"/></Button>
+                  <Button variant="outline" size="icon" className="mr-2 bg-white/70 dark:bg-slate-900/70" onClick={() => setCarouselIdx((i) => (i + 1) % openProject.media.length)} aria-label="Next image">
+                    <ChevronRight className="h-4 w-4"/>
+                  </Button>
                 </div>
               </div>
               <div className="mt-2 flex gap-2 overflow-x-auto no-scrollbar">
                 {openProject.media.map((m, i) => (
                   <button key={m.src} onClick={() => setCarouselIdx(i)} className={cx('h-16 w-28 flex-shrink-0 rounded-lg overflow-hidden border transition-all duration-200', i === carouselIdx ? 'ring-2 ring-fuchsia-600 dark:ring-fuchsia-400 border-transparent' : 'opacity-80 hover:opacity-100 border-slate-200 dark:border-slate-700')}>
-                    <ProjectImage2 src={m.src} alt={m.alt} className="h-full w-full object-cover" />
+                    <ProjectImage src={m.src} alt={m.alt} className="h-full w-full object-cover" />
                   </button>
                 ))}
               </div>
@@ -453,15 +677,36 @@ export default function App() {
         </Dialog>
       </Section>
 
+      {/* SKILLS */}
       <Section id="skills" title="Skills" icon={<LineChart className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card className="hover:shadow-md transition-shadow h-full"><CardHeader><CardTitle className="text-lg flex items-center gap-2"><BarChart className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" /> Data & Analytics</CardTitle></CardHeader><CardContent className="text-sm text-slate-700 dark:text-slate-300"><ul className="list-disc pl-5 space-y-1"><li>Python (pandas, NumPy, scikit‑learn, matplotlib, seaborn)</li><li>SQL</li><li>EDA, cleaning, feature engineering</li><li>Classification, K‑Means clustering</li></ul></CardContent></Card>
-          <Card className="hover:shadow-md transition-shadow h-full"><CardHeader><CardTitle className="text-lg flex items-center gap-2"><Database className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" /> BI & Visualisation</CardTitle></CardHeader><CardContent className="text-sm text-slate-700 dark:text-slate-300"><ul className="list-disc pl-5 space-y-1"><li>Power BI (incl. DAX)</li><li>Tableau (blending, parameters, calculated fields)</li><li>Qlik Sense</li><li>Advanced Excel (pivots, Power Query)</li></ul></CardContent></Card>
-          <Card className="hover:shadow-md transition-shadow h-full"><CardHeader><CardTitle className="text-lg flex items-center gap-2"><ClipboardList className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" /> Data Modelling & Engineering</CardTitle></CardHeader><CardContent className="text-sm text-slate-700 dark:text-slate-300"><ul className="list-disc pl-5 space-y-1"><li>Data modelling (ERD, PK/FK, normalisation)</li><li>ETL & data pipelines</li><li>Data warehousing</li></ul></CardContent></Card>
-          <Card className="hover:shadow-md transition-shadow h-full"><CardHeader><CardTitle className="text-lg flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" /> Business Analysis</CardTitle></CardHeader><CardContent className="text-sm text-slate-700 dark:text-slate-300"><ul className="list-disc pl-5 space-y-1"><li>Requirements gathering</li><li>Process mapping (Visio/Whimsical)</li><li>KPI design & reporting</li><li>SWOT, PESTLE, GAP analysis</li></ul></CardContent></Card>
+          <SkillCard title="Data & Analytics" icon={<BarChart className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" />} items={[
+            'Python (pandas, NumPy, scikit‑learn, matplotlib, seaborn)',
+            'SQL',
+            'EDA, cleaning, feature engineering',
+            'Classification, K‑Means clustering',
+          ]} />
+          <SkillCard title="BI & Visualisation" icon={<Database className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" />} items={[
+            'Power BI (incl. DAX)',
+            'Tableau (blending, parameters, calculated fields)',
+            'Qlik Sense',
+            'Advanced Excel (pivots, Power Query)',
+          ]} />
+          <SkillCard title="Data Modelling & Engineering" icon={<ClipboardList className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" />} items={[
+            'Data modelling (ERD, PK/FK, normalisation)',
+            'ETL & data pipelines',
+            'Data warehousing',
+          ]} />
+          <SkillCard title="Business Analysis" icon={<ShieldCheck className="h-5 w-5 text-fuchsia-600 dark:text-fuchsia-400" />} items={[
+            'Requirements gathering',
+            'Process mapping (Visio/Whimsical)',
+            'KPI design & reporting',
+            'SWOT, PESTLE, GAP analysis',
+          ]} />
         </div>
       </Section>
 
+      {/* ACHIEVEMENTS */}
       <Section id="achievements" title="Achievements" icon={<Award className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-3 gap-6">
           {achievements.map((a) => (
@@ -473,37 +718,100 @@ export default function App() {
         </div>
       </Section>
 
+      {/* EDUCATION */}
       <Section id="education" title="Education" icon={<GraduationCap className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-2 gap-6">
+          {/* University of Liverpool */}
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader><CardTitle className="text-lg">University of Liverpool — Master’s in Business Analytics & Big Data</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-lg">University of Liverpool — Master’s in Business Analytics & Big Data</CardTitle>
+            </CardHeader>
             <CardContent className="text-sm text-slate-700 dark:text-slate-300 space-y-4">
               <div className="text-slate-600 dark:text-slate-400">Sep 2023 – Sep 2024</div>
-              <p>Academic projects across business data analytics and high‑quality research; achieved <strong>dissertation distinction</strong>.</p>
-              <div><div className="font-medium mb-1">Modules</div><ul className="list-disc pl-5 space-y-1"><li>Data Mining & Machine Learning</li><li>Digital Business Technology & Management</li><li>Big Data Management</li><li>Big Data Analytics for Business</li><li>Digital Strategy</li><li>Sustainable Supply Chain Management</li><li>Project & Portfolio Management</li><li>Global Corporate Strategy</li><li>M.Sc. Project (Distinction)</li></ul></div>
-              <div><div className="font-medium mb-2">Skills</div><div className="flex flex-wrap gap-2">{['Python','SQL','Power BI','Tableau','Qlik Sense','Machine Learning','ETL','Data Modelling','Dashboarding','Business Analysis','Data Analysis','Project Management','DAX','SWOT/PESTLE','Presentation','Teamwork'].map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}</div></div>
+              <p>
+                Academic projects across business data analytics and high‑quality research; achieved <strong>dissertation distinction</strong>.
+              </p>
+              <div>
+                <div className="font-medium mb-1">Modules</div>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Data Mining & Machine Learning</li>
+                  <li>Digital Business Technology & Management</li>
+                  <li>Big Data Management</li>
+                  <li>Big Data Analytics for Business</li>
+                  <li>Digital Strategy</li>
+                  <li>Sustainable Supply Chain Management</li>
+                  <li>Project & Portfolio Management</li>
+                  <li>Global Corporate Strategy</li>
+                  <li>M.Sc. Project (Distinction)</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-medium mb-2">Skills</div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Python', 'SQL', 'Power BI', 'Tableau', 'Qlik Sense', 'Machine Learning', 'ETL', 'Data Modelling',
+                    'Dashboarding', 'Business Analysis', 'Data Analysis', 'Project Management', 'DAX', 'SWOT/PESTLE',
+                    'Presentation', 'Teamwork'
+                  ].map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}
+                </div>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Simplilearn Alumni */}
           <Card className="hover:shadow-md transition-shadow">
-            <CardHeader><CardTitle className="text-lg">Simplilearn Alumni — Master’s Programme, Business Analysis (IIBA‑endorsed)</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-lg">Simplilearn Alumni — Master’s Programme, Business Analysis (IIBA‑endorsed)</CardTitle>
+            </CardHeader>
             <CardContent className="text-sm text-slate-700 dark:text-slate-300 space-y-4">
               <div className="text-slate-600 dark:text-slate-400">Jun 2022 – Sep 2022 • Grade: Distinction</div>
-              <p>Industry‑aligned programme covering BA methodologies, stakeholder management, process mapping, data analysis and visualisation; completed with distinction.</p>
-              <div><div className="font-medium mb-1">Core Learning</div><ul className="list-disc pl-5 space-y-1"><li>CBAP® Training — BA Planning, Elicitation, Requirements, Solution Evaluation</li><li>Mathematical Optimisation — Linear programming for decision‑making</li><li>Harvard Business Publishing case studies</li><li>Data Analysis & Visualisation with Python (IBM Skills Network)</li><li>Tableau for interactive dashboarding</li></ul></div>
-              <div><div className="font-medium mb-2">Skills</div><div className="flex flex-wrap gap-2">{['Business Analysis','Requirements Gathering','Process Mapping','Stakeholder Management','CBAP (training)','Python (Pandas/NumPy/Matplotlib/Seaborn)','Tableau'].map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}</div></div>
+              <p>
+                Industry‑aligned programme covering BA methodologies, stakeholder management, process mapping, data analysis and visualisation; completed with distinction.
+              </p>
+              <div>
+                <div className="font-medium mb-1">Core Learning</div>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>CBAP® Training — BA Planning, Elicitation, Requirements, Solution Evaluation</li>
+                  <li>Mathematical Optimisation — Linear programming for decision‑making</li>
+                  <li>Harvard Business Publishing case studies</li>
+                  <li>Data Analysis & Visualisation with Python (IBM Skills Network)</li>
+                  <li>Tableau for interactive dashboarding</li>
+                </ul>
+              </div>
+              <div>
+                <div className="font-medium mb-2">Skills</div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Business Analysis', 'Requirements Gathering', 'Process Mapping', 'Stakeholder Management',
+                    'CBAP (training)', 'Python (Pandas/NumPy/Matplotlib/Seaborn)', 'Tableau'
+                  ].map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}
+                </div>
+              </div>
             </CardContent>
           </Card>
+
+          {/* B.Tech */}
           <Card className="hover:shadow-md transition-shadow md:col-span-2">
-            <CardHeader><CardTitle className="text-lg">Sri Manakula Vinayagar Engineering College (Pondicherry University) — B.Tech, Electronics & Communications Engineering</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-lg">Sri Manakula Vinayagar Engineering College (Pondicherry University) — B.Tech, Electronics & Communications Engineering</CardTitle>
+            </CardHeader>
             <CardContent className="text-sm text-slate-700 dark:text-slate-300 space-y-3">
               <div className="text-slate-600 dark:text-slate-400">2018 – 2022 • Grade: 2:1</div>
               <p>Activities & societies: National conference participation and an international‑journal publication.</p>
-              <div><div className="font-medium mb-2">Skills</div><div className="flex flex-wrap gap-2">{['Problem Solving','Team Leadership','Creativity','Communication'].map((s) => (<Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>))}</div></div>
+              <div>
+                <div className="font-medium mb-2">Skills</div>
+                <div className="flex flex-wrap gap-2">
+                  {['Problem Solving','Team Leadership','Creativity','Communication'].map((s) => (
+                    <Badge key={s} variant="secondary" className="rounded-full">{s}</Badge>
+                  ))}
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
       </Section>
 
+      {/* RECOMMENDATIONS */}
       <Section id="references" title="Recommendations" icon={<Quote className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="relative">
           <div className="flex items-center justify-between mb-3">
@@ -522,45 +830,84 @@ export default function App() {
         </div>
       </Section>
 
+      {/* CERTIFICATIONS */}
       <Section id="certs" title="Licences & Certifications" icon={<FileSpreadsheet className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="mb-4 flex flex-wrap items-center gap-2">
-          {['All', ...Array.from(new Set(certsGallery.flatMap(c => c.tags)))].map((t) => (<Button key={t} variant={'All'===t ? 'default' : 'outline'} size="sm" onClick={() => setCertFilter(t as string)}>{t}</Button>))}
-          <input value={certQuery} onChange={(e) => setCertQuery(e.target.value)} placeholder="Search by title or issuer" className="ml-auto w-full md:w-72 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm" />
+          {certTags.map((t) => (
+            <Button key={t} variant={certFilter === t ? 'default' : 'outline'} size="sm" onClick={() => setCertFilter(t as string)}>{t}</Button>
+          ))}
+          <input
+            value={certQuery}
+            onChange={(e) => setCertQuery(e.target.value)}
+            placeholder="Search by title or issuer"
+            className="ml-auto w-full md:w-72 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"
+          />
         </div>
         <div className="grid md:grid-cols-2 gap-6">
-          {(certFilter === 'All' ? certsGallery : certsGallery.filter(c => c.tags.includes(certFilter))).filter(c => !certQuery.trim() || c.title.toLowerCase().includes(certQuery.toLowerCase()) || c.issuer.toLowerCase().includes(certQuery.toLowerCase())).map((c) => (
+          {filteredCerts.map((c) => (
             <Card key={c.title} className="hover:shadow-md transition-shadow">
-              <CardHeader><CardTitle className="text-lg">{c.title}</CardTitle><div className="text-sm text-slate-500 dark:text-slate-400">{c.issuer} • {c.date}</div></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-lg">{c.title}</CardTitle>
+                <div className="text-sm text-slate-500 dark:text-slate-400">{c.issuer} • {c.date}</div>
+              </CardHeader>
               <CardContent className="text-sm">
-                {c.type === 'image' && (<div className="rounded-md overflow-hidden border border-slate-200 dark:border-slate-700"><ProjectImage2 src={c.image as string} alt={c.title} className="w-full h-auto object-contain" /></div>)}
-                {c.type === 'pdf' && (<Button onClick={() => setOpenCert(c)} className="mt-2">View certificate</Button>)}
-                {c.type === 'url' && (<a href={c.asset} target="_blank" rel="noreferrer"><Button className="mt-2">Open certificate</Button></a>)}
+                {c.type === 'image' && (
+                  <div className="rounded-md overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <ProjectImage src={c.image as string} alt={c.title} className="w-full h-auto object-contain" />
+                  </div>
+                )}
+                {c.type === 'pdf' && (
+                  <Button onClick={() => setOpenCert(c)} className="mt-2">View certificate</Button>
+                )}
+                {c.type === 'url' && (
+                  <a href={c.asset} target="_blank" rel="noreferrer"><Button className="mt-2">Open certificate</Button></a>
+                )}
               </CardContent>
             </Card>
           ))}
         </div>
+
         <Dialog open={!!openCert} onOpenChange={(v) => { if (!v) setOpenCert(null); }}>
-          <DialogHeader><DialogTitle>{openCert?.title}</DialogTitle><DialogDescription>{openCert?.issuer} • {openCert?.date}</DialogDescription></DialogHeader>
-          {openCert?.type === 'pdf' && (<div className="mt-3"><iframe src={openCert.asset} className="w-full h-[70vh] rounded-md border border-slate-200 dark:border-slate-700" title="Certificate" /></div>)}
-          {openCert?.type === 'image' && (<div className="mt-3"><ProjectImage2 src={openCert.image as string} alt={openCert.title} className="w-full h-auto object-contain" /></div>)}
+          <DialogHeader>
+            <DialogTitle>{openCert?.title}</DialogTitle>
+            <DialogDescription>{openCert?.issuer} • {openCert?.date}</DialogDescription>
+          </DialogHeader>
+          {openCert?.type === 'pdf' && (
+            <div className="mt-3">
+              <iframe src={openCert.asset} className="w-full h-[70vh] rounded-md border border-slate-200 dark:border-slate-700" title="Certificate" />
+            </div>
+          )}
+          {openCert?.type === 'image' && (
+            <div className="mt-3">
+              <ProjectImage src={openCert.image as string} alt={openCert.title} className="w-full h-auto object-contain" />
+            </div>
+          )}
         </Dialog>
       </Section>
 
+      {/* VOLUNTEERING */}
       <Section id="volunteering" title="Volunteering" icon={<FileText className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-2 gap-6">
           {volunteering.map((v) => (
             <Card key={v.org} className="hover:shadow-md transition-shadow h-full">
-              <CardHeader><CardTitle className="text-lg">{v.org} — <span className="text-slate-600 dark:text-slate-300">{v.role}</span></CardTitle></CardHeader>
+              <CardHeader>
+                <CardTitle className="text-lg">{v.org} — <span className="text-slate-600 dark:text-slate-300">{v.role}</span></CardTitle>
+              </CardHeader>
               <CardContent className="text-sm text-slate-700 dark:text-slate-300">
                 <div className="text-sm text-slate-500 dark:text-slate-400 mb-2">{v.time}</div>
                 <p>{v.text}</p>
-                {v.logo && (<div className="mt-4 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 w-40"><ProjectImage2 src={v.logo} alt={`${v.org} logo`} className="w-full h-auto object-contain" /></div>)}
+                {v.logo && (
+                  <div className="mt-4 rounded-md overflow-hidden border border-slate-200 dark:border-slate-700 w-40">
+                    <ProjectImage src={v.logo} alt={`${v.org} logo`} className="w-full h-auto object-contain" />
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}
         </div>
       </Section>
 
+      {/* CONTACT */}
       <Section id="contact" title="Get In Touch" icon={<Mail className="h-6 w-6 text-fuchsia-600 dark:text-fuchsia-400" /> }>
         <div className="grid md:grid-cols-2 gap-12 items-start">
           <div>
@@ -575,7 +922,9 @@ export default function App() {
             <Card className="border-dashed">
               <CardHeader><CardTitle className="text-lg">Download my CV</CardTitle></CardHeader>
               <CardContent>
-                <a href={encodeURI(PROFILE.cvUrl)} download><Button className="gap-2"><Download className="h-4 w-4"/> Download CV (PDF)</Button></a>
+                <a href={encodeURI(PROFILE.cvUrl)} download>
+                  <Button className="gap-2"><Download className="h-4 w-4"/> Download CV (PDF)</Button>
+                </a>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-3">File: Jenifer CV.pdf</p>
               </CardContent>
             </Card>
@@ -583,14 +932,20 @@ export default function App() {
         </div>
       </Section>
 
+      {/* FOOTER */}
       <footer className="bg-slate-800 dark:bg-slate-950 text-white py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-sm">&copy; {new Date().getFullYear()} Jenifer Pushparaj. All rights reserved.</p>
         </div>
       </footer>
 
+      {/* Scroll to Top Button */}
       {showTop && (
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="fixed bottom-8 right-8 bg-fuchsia-600 text-white p-3 rounded-full shadow-lg hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 transition-all duration-300 z-50 dark:bg-fuchsia-500 dark:hover:bg-fuchsia-600" aria-label="Scroll to top">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-8 right-8 bg-fuchsia-600 text-white p-3 rounded-full shadow-lg hover:bg-fuchsia-700 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 transition-all duration-300 z-50 dark:bg-fuchsia-500 dark:hover:bg-fuchsia-600"
+          aria-label="Scroll to top"
+        >
           <ArrowUp size={24} />
         </button>
       )}
